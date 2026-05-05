@@ -1,13 +1,8 @@
-local httpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-local SaveManager = {} do
-    SaveManager.Folder = "FluentSettings"
+ SaveManager.Folder = "FluentSettings"
     SaveManager.Ignore = {}
     
-    -- ดึงชื่อผู้เล่นมาใช้เป็นชื่อไฟล์
-    local ConfigName = LocalPlayer.Name
+
+    local ConfigName = player.Name
 
     SaveManager.Parser = {
         Toggle = {
@@ -45,7 +40,7 @@ local SaveManager = {} do
         self:BuildFolderTree()
     end
 
-    -- ฟังก์ชันสำหรับ Auto Save (จะเซฟเข้าชื่อ User อัตโนมัติ)
+   
     function SaveManager:AutoSave()
         return self:Save(ConfigName)
     end
@@ -69,7 +64,7 @@ local SaveManager = {} do
     end
 
     function SaveManager:Load(name)
-        name = name or ConfigName -- ถ้าไม่ใส่ชื่อ จะโหลดชื่อ User อัตโนมัติ
+        name = name or ConfigName 
         local file = self.Folder .. "/settings/" .. name .. ".json"
         if not isfile(file) then return false, "invalid file" end
 
@@ -96,7 +91,6 @@ local SaveManager = {} do
         self.Options = library.Options
     end
 
-    -- ฟังก์ชันรันตอนเริ่มสคริปต์เพื่อโหลดค่าของ User ทันที
     function SaveManager:LoadUserConfig()
         local success, err = self:Load(ConfigName)
         if success then
@@ -109,7 +103,7 @@ local SaveManager = {} do
         end
     end
 
-    -- สร้าง Loop สำหรับ Auto Save ทุกๆ 30 วินาที (Optional)
+   
     function SaveManager:InitializeAutoSave(interval)
         task.spawn(function()
             while task.wait(interval or 30) do
@@ -119,6 +113,3 @@ local SaveManager = {} do
     end
 
     SaveManager:BuildFolderTree()
-end
-
-return SaveManager
